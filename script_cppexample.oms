@@ -1,0 +1,27 @@
+val my_param1 = Val[Double]
+val my_output1 = Val[Double]
+
+
+
+val exploration = ExplorationTask( 
+ (my_param1 in (0.0 to 10.0 by 1.0))
+)
+
+
+val my_task  = ScalaTask("val my_output1 = 10 * my_param1") set (
+    inputs += my_param1,
+    outputs += my_output1
+  )
+
+
+val my_hook = AppendToCSVFileHook( workDirectory / "my_results.csv", my_output1)
+val ts = ToStringHook()
+
+
+
+val env = LocalEnvironment(4)
+
+//exploration -< (my_task hook my_hook on env by 2)
+
+
+exploration hook ts
